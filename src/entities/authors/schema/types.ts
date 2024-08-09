@@ -1,5 +1,5 @@
-import { IAuthor } from '@/app/entities/authors';
-import { IPost } from '@/app/entities/posts';
+import { IAuthor } from '@/entities/authors';
+import { IPost } from '@/entities/posts';
 import mongoose from 'mongoose';
 
 export interface IAuthorDocument<TPost = IPost>

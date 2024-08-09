@@ -30,6 +30,11 @@ export const postSchema: Schema<IPostDocument> = new Schema<IPostDocument>({
     unique: false,
     default: 0,
   },
+  date: {
+    type: String,
+    required: false,
+    unique: false,
+  }
 });
 
 export const postModel =

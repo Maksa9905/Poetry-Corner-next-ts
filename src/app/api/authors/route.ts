@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import { connectToDataBase } from '../helpers/connect';
-import { authorModel, IAuthorDocument } from '../../entities/authors/schema';
-import { IPostResponse } from '@/app/entities/posts';
-import { IAuthorResponse } from '@/app/entities/authors';
+import { authorModel, IAuthorDocument } from '../../../entities/authors/schema';
+import { IPostResponse } from '@/entities/posts';
+import { IAuthorResponse } from '@/entities/authors';
 import { randomBytes } from 'crypto';
 
 try {

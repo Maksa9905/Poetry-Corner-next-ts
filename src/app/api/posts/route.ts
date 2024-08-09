@@ -1,8 +1,9 @@
-import { IPostDocument, postModel } from '../../entities/posts/schema';
+import { IPostDocument, postModel } from '@/entities/posts';
 import mongoose from 'mongoose';
 import { connectToDataBase } from '../helpers/connect';
-import { authorModel, IAuthorDocument } from '../../entities/authors/schema';
-import { IPost, IPostResponse } from '@/app/entities/posts';
+import { authorModel, IAuthorDocument } from '@/entities/authors';
+import { IPost, IPostResponse } from '@/entities/posts';
+import { IPostsResponse } from '@/entities/posts';
 
 try {
   connectToDataBase();
@@ -26,9 +27,10 @@ export async function POST(req: Request) {
       text: body.text,
       rating: 0,
       views: 0,
+      date: new Date().toISOString(),
     });
 
-    await currentAuthor?.posts.push(newPost);
+    await currentAuthor?.posts?.push(newPost);
     await currentAuthor?.save();
     return new Response(JSON.stringify(newPost));
   } else {
@@ -40,31 +42,31 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const search = searchParams.get('search');
   const authors: IAuthorDocument<IPostDocument>[] = await authorModel.find();
-  const posts: IPostDocument[] = authors.reduce(
-    (posts: IPostDocument[], author) => {
-      return [...posts, ...author.posts];
-    },
-    [],
-  );
+  const posts = authors.reduce((posts: IPostDocument[], author) => {
+    return [...posts, ...author.posts!];
+  }, []);
 
   if (search) {
     const searchByTitlePosts = posts.filter((post) =>
       post.title.includes(search),
     );
-    const response = {
+    const response: IPostsResponse = {
       length: searchByTitlePosts.length,
-      posts: searchByTitlePosts,
+      posts: searchByTitlePosts.map((post) => ({
+        ...post,
+        author: post.$parent() as IAuthorDocument<IPostResponse>,
+      })),
     };
     return new Response(JSON.stringify(searchByTitlePosts));
   } else {
-    const authors: IAuthorDocument[] = await authorModel.find();
-    const posts = authors.reduce((posts: IPost[], author) => {
-      return [...posts, ...author.posts];
-    }, []);
-
-    const response = {
+    const response: IPostsResponse = {
       length: posts.length,
-      posts: posts,
+      posts: posts.map((post) => {
+        return {
+          ...post.toObject(),
+          author: post.$parent() as IAuthorDocument<IPostResponse>,
+        };
+      }),
     };
 
     return new Response(JSON.stringify(response));

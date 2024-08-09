@@ -1,6 +1,6 @@
 import { Schema } from 'mongoose';
 import mongoose from 'mongoose';
-import { postSchema } from '@/app/entities/posts/schema';
+import { postSchema } from '@/entities/posts/schema';
 import { IAuthorDocument, IAuthorModel } from './types';
 
 export const authorSchema: Schema<IAuthorDocument> =

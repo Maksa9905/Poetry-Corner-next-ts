@@ -1,5 +1,5 @@
-import { IAuthorDocument } from '@/app/entities/authors/schema';
-import { IPostDocument } from '@/app/entities/posts/schema';
+import { IAuthorDocument } from '@/entities/authors/schema';
+import { IPostDocument } from '@/entities/posts/schema';
 
 export function findPost(
   _id: string,

@@ -1,4 +1,4 @@
-import { IPost } from '@/app/entities/posts';
+import { IPost } from '@/entities/posts';
 import mongoose from 'mongoose';
 
 export interface IPostDocument
