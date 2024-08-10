@@ -11,6 +11,7 @@ import { IPostResponse, IPostsResponse } from '@/entities/posts';
 import { QueryStatusType } from '@/entities/query/types';
 import { IAuthorResponse } from '@/entities/authors';
 import PostCard from '@/shared/PostCard/ui/PostCard';
+import PostCardSkeleton from '@/shared/PostCard/ui/PostCardSkeleton';
 
 async function getPosts(): Promise<IPostsResponse> {
   const posts = await fetch('http://localhost:3000/api/posts');
@@ -65,9 +66,16 @@ export default function RecentPosts({
           direction === 'vertical' ? 'grid-flow-col' : 'grid-flow-row'
         } gap-x-[10px] gap-y-[20px] py-[10px]`}
       >
-        {/* {queryStatus === 'loading' && } */}
+        {queryStatus === 'loading' && [
+          [...Array(postsGrid.columns * postsGrid.rows)].map((i) => (
+            <PostCardSkeleton key={i} />
+          )),
+        ]}
         {queryStatus === 'success' &&
-          posts?.posts.map((post) => <PostCard key={post._id} post={post} />)}
+          posts?.posts.map((post, i) => {
+            if (i < postsGrid.columns * postsGrid.rows)
+              return <PostCard key={post._id} post={post} />;
+          })}
       </div>
       <Link className='hover:text-red' href='/posts'>
         Другие публикации...

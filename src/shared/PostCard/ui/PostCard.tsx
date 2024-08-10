@@ -8,7 +8,6 @@ export interface PostCardProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export default function PostCard({ post, ...restProps }: PostCardProps) {
-  console.log(post);
   return (
     <div {...restProps}>
       <h4 className='text-[20px] font-[500]'>

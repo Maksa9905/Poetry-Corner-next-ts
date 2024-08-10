@@ -4,6 +4,7 @@ import { connectToDataBase } from '../helpers/connect';
 import { authorModel, IAuthorDocument } from '@/entities/authors';
 import { IPost, IPostResponse } from '@/entities/posts';
 import { IPostsResponse } from '@/entities/posts';
+import { SortDirection, sorting, SortType } from '@/app/features/Sorting';
 
 try {
   connectToDataBase();
@@ -39,15 +40,19 @@ export async function POST(req: Request) {
 }
 
 export async function GET(req: Request) {
+  console.log('WTF, where is query?!?!??!');
   const { searchParams } = new URL(req.url);
   const search = searchParams.get('search');
+  const direction = (searchParams.get('direction') ?? 'desc') as SortDirection;
+  const sort = (searchParams.get('sort') ?? 'newest') as SortType;
   const authors: IAuthorDocument<IPostDocument>[] = await authorModel.find();
   const posts = authors.reduce((posts: IPostDocument[], author) => {
     return [...posts, ...author.posts!];
   }, []);
+  const sortedPosts = sorting(posts, sort, direction);
 
   if (search) {
-    const searchByTitlePosts = posts.filter((post) =>
+    const searchByTitlePosts = sortedPosts.filter((post) =>
       post.title.includes(search),
     );
     const response: IPostsResponse = {
@@ -60,8 +65,8 @@ export async function GET(req: Request) {
     return new Response(JSON.stringify(searchByTitlePosts));
   } else {
     const response: IPostsResponse = {
-      length: posts.length,
-      posts: posts.map((post) => {
+      length: sortedPosts.length,
+      posts: sortedPosts.map((post) => {
         return {
           ...post.toObject(),
           author: post.$parent() as IAuthorDocument<IPostResponse>,
