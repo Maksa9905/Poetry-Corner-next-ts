@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import { IAuthorResponse } from '../authors';
 
 export interface IPost {
