@@ -12,6 +12,7 @@ import { QueryStatusType } from '@/entities/query/types';
 import { IAuthorResponse } from '@/entities/authors';
 import PostCard from '@/shared/PostCard/ui/PostCard';
 import PostCardSkeleton from '@/shared/PostCard/ui/PostCardSkeleton';
+import { recentPostsGrid } from '../model/gridConfig';
 
 async function getPosts(): Promise<IPostsResponse> {
   const posts = await fetch('http://localhost:3000/api/posts');
@@ -19,16 +20,11 @@ async function getPosts(): Promise<IPostsResponse> {
 }
 
 export interface RecentPostsProps<TPost = IPostResponse> {
-  recentPostsGrid: IMediaQuery;
   direction: 'vertical' | 'horizontal';
   author?: IAuthorResponse<TPost>;
 }
 
-export default function RecentPosts({
-  recentPostsGrid,
-  direction,
-  author,
-}: RecentPostsProps) {
+export default function RecentPosts({ direction, author }: RecentPostsProps) {
   const postsGrid = useGridInitialization(recentPostsGrid);
   const [posts, setPosts] = useState<IPostsResponse>();
   const [queryStatus, setQueryStatus] = useState<QueryStatusType>('idle');

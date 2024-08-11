@@ -40,7 +40,6 @@ export async function POST(req: Request) {
 }
 
 export async function GET(req: Request) {
-  console.log('WTF, where is query?!?!??!');
   const { searchParams } = new URL(req.url);
   const search = searchParams.get('search');
   const direction = (searchParams.get('direction') ?? 'desc') as SortDirection;

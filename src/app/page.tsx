@@ -1,34 +1,6 @@
-'use client';
-import Image from 'next/image';
 import VideoSection from '../shared/VideoSection/ui/VideoSection';
 import RecentPosts from '../shared/RecentPosts/ui/RecentPosts';
-
-const RecentPostsGrid = {
-  default: {
-    columns: 3,
-    rows: 2,
-  },
-  screen640: {
-    columns: 1,
-    rows: 2,
-  },
-  screen768: {
-    columns: 2,
-    rows: 1,
-  },
-  screen1024: {
-    columns: 2,
-    rows: 2,
-  },
-  screen1440: {
-    columns: 3,
-    rows: 2,
-  },
-  screen1920: {
-    columns: 3,
-    rows: 2,
-  },
-};
+import RecentNews from '@/shared/RecentNews/ui/RecentNews';
 
 export default function Home() {
   return (
@@ -49,13 +21,10 @@ export default function Home() {
         безпрепятственно делиться своими мыслями в поэтической форме. Даешь{' '}
         <span className='text-red font-[500]'>свободу искусству!</span>
       </p>
-      {/* <News news={news}></News> */}
+      <RecentNews />
       <VideoSection src='https://www.youtube.com/embed/yYjoTbayfpw?si=ZGBoME8qsuPX7bwN' />
       {/* <AdsWidget ads={ads}></AdsWidget> */}
-      <RecentPosts
-        direction='vertical'
-        recentPostsGrid={RecentPostsGrid}
-      ></RecentPosts>
+      <RecentPosts direction='vertical' />
     </main>
   );
 }
