@@ -48,26 +48,20 @@ export async function DELETE(req: Request) {
 
 export async function PUT(req: Request) {
   const body = await req.json();
-  const { searchParams } = new URL(req.url);
-  const _id = searchParams.get('_id');
   const authors: IAuthorDocument<IPostDocument>[] = await authorModel.find();
 
-  if (_id) {
-    const currentPost = findPost(_id, authors);
-    if (currentPost) {
-      currentPost.title = body.title;
-      currentPost.description = body.description;
-      currentPost.text = body.text;
-      currentPost.rating = body.rating;
-      currentPost.views = body.views;
-      currentPost.date = new Date().toISOString();
-      const author = await currentPost.$parent();
-      await author?.save();
-      return new Response(JSON.stringify(currentPost));
-    } else {
-      return new Response('Post not found', { status: 404 });
-    }
+  const currentPost = findPost(body._id, authors);
+  if (currentPost) {
+    currentPost.title = body.title;
+    currentPost.description = body.description;
+    currentPost.text = body.text;
+    currentPost.rating = body.rating;
+    currentPost.views = body.views;
+    currentPost.date = new Date().toISOString();
+    const author = await currentPost.$parent();
+    await author?.save();
+    return new Response(JSON.stringify(currentPost));
   } else {
-    return new Response('Enter _id', { status: 501 });
+    return new Response('Post not found', { status: 404 });
   }
 }
